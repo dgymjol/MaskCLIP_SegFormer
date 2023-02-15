@@ -2,7 +2,7 @@
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='EncoderDecoder',
-    pretrained=None,
+    pretrained='pretrain/mit_b0.pth',
     backbone=dict(
         type='MixVisionTransformer',
         in_channels=3,
@@ -22,15 +22,25 @@ model = dict(
         type='MaskClipPlusSegformerHead',
         vit=False,
         in_channels=2048,
-        channels=512,
-        num_classes=20,
+        channels=1024,
+        num_classes=0,
         dropout_ratio=0,
         norm_cfg=norm_cfg,
         loss_decode=dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
+        decode_module_cfg=dict(
+            type='SegformerHead',
+            in_channels=[32, 64, 160, 256],
+            in_index=[0, 1, 2, 3],
+            channels=1024,
+            dropout_ratio=0.1,
+            num_classes=59,
+            norm_cfg=norm_cfg,
+            align_corners=False,
+        ),
         text_categories=59,
         text_channels=1024,
-        text_embeddings_path='pretrain/voc_RN50_clip_text.pth',
+        text_embeddings_path='pretrain/context_RN50_clip_text.pth',
         cls_bg=False,
         norm_feat=False,
         clip_unlabeled_cats=list(range(0, 20)),

@@ -1,5 +1,5 @@
 _base_ = [
-    '../../_base_/models/maskclip_plus_vit16_segformer.py', '../../_base_/datasets/pascal_context_59.py', 
+    '../../_base_/models/maskclip_plus_r50_segformer.py', '../../_base_/datasets/pascal_context_59.py', 
     '../../_base_/default_runtime.py', '../../_base_/schedules/schedule_4k_adamw.py'
 ]
 
@@ -9,7 +9,7 @@ model = dict(
     decode_head=dict(
         num_classes=59,
         text_categories=59,
-        text_embeddings_path='pretrain/context_ViT16_clip_text.pth',
+        text_embeddings_path='pretrain/context_RN50_clip_text.pth',
         clip_unlabeled_cats=suppress_labels,
     )
 )

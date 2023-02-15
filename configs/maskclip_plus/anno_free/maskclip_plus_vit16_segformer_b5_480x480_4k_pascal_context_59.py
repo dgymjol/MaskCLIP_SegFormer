@@ -1,11 +1,11 @@
 _base_ = [
     '../../_base_/models/maskclip_plus_vit16_segformer.py', '../../_base_/datasets/pascal_context_59.py', 
-    '../../_base_/default_runtime.py', '../../_base_/schedules/schedule_4k.py'
+    '../../_base_/default_runtime.py', '../../_base_/schedules/schedule_4k_adamw.py'
 ]
 
 suppress_labels = list(range(0, 59))
 model = dict(
-    pretrained='pretrain/SegFormer_B5.pth',
+    pretrained='pretrain/mit_b5.pth',
     backbone=dict(
         embed_dims=64, num_heads=[1, 2, 5, 8], num_layers=[3, 6, 40, 3]),
     decode_head=dict(
@@ -13,7 +13,8 @@ model = dict(
         text_categories=59,
         text_embeddings_path='pretrain/context_ViT16_clip_text.pth',
         clip_unlabeled_cats=suppress_labels,
-    ),
+        decode_module_cfg=dict(in_channels=[64, 128, 320, 512])
+    )
 )
 
 find_unused_parameters=True
@@ -34,7 +35,7 @@ train_pipeline = [
     dict(type='Collect', keys=['img', 'gt_semantic_seg']),
 ]
 data = dict(
-    samples_per_gpu=4,
+    samples_per_gpu=2,
     train=dict(
         pipeline=train_pipeline
     )

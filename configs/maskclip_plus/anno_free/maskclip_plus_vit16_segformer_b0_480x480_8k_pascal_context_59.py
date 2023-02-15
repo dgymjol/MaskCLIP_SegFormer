@@ -1,6 +1,6 @@
 _base_ = [
     '../../_base_/models/maskclip_plus_vit16_segformer.py', '../../_base_/datasets/pascal_context_59.py', 
-    '../../_base_/default_runtime.py', '../../_base_/schedules/schedule_4k_adamw.py'
+    '../../_base_/default_runtime.py', '../../_base_/schedules/schedule_8k_adamw.py'
 ]
 
 suppress_labels = list(range(0, 59))

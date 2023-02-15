@@ -22,16 +22,18 @@ bash pascal_context_preparation.sh
 bash download_weights.sh
 ```
 
+**Step 3.**  Download the SegFormer weights pretrained on ImageNet-1 at [here](https://github.com/NVlabs/SegFormer#trainings) and locate them in `pretrain` folder
+
+
+
 # MaskCLIP+
 
 MaskCLIP+ trains another segmentation model(SegFormer) with pseudo labels extracted from MaskCLIP.
 
-
 **Train.** (please refer to [train.md](docs/en/train.md))
 
 ```shell
-python tools/train.py ${CONFIG_FILE}
-# in exp.sh, there are many examples
+bash tools/dist_train.sh ${CONFIG_FILE} ${GPU_NUM}
 ```
 
 **Inference.** 
@@ -45,6 +47,7 @@ Get qualitative results:
 python tools/test.py ${CONFIG_FILE} ${CHECKPOINT_FILE} --show-dir ${OUTPUT_DIR}
 ```
 
+In exp.sh, there are many examples
 # Citation
 the code base is  MaskCLIP
 ```

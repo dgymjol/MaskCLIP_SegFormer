@@ -1,5 +1,5 @@
 # model settings
-norm_cfg = dict(type='BN', requires_grad=True)
+norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='EncoderDecoder',
     pretrained=None,
@@ -28,6 +28,16 @@ model = dict(
         norm_cfg=norm_cfg,
         loss_decode=dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
+        decode_module_cfg=dict(
+            type='SegformerHead',
+            in_channels=[32, 64, 160, 256],
+            in_index=[0, 1, 2, 3],
+            channels=512,
+            dropout_ratio=0.1,
+            num_classes=59,
+            norm_cfg=norm_cfg,
+            align_corners=False,
+        ),
         text_categories=20,
         text_channels=512,
         clip_channels=768,

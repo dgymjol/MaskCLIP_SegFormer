@@ -1,16 +1,19 @@
 _base_ = [
-    '../../_base_/models/maskclip_plus_vit16_segformer.py', '../../_base_/datasets/pascal_context_59.py', 
+    '../../_base_/models/maskclip_plus_r50_segformer.py', '../../_base_/datasets/pascal_context_59.py', 
     '../../_base_/default_runtime.py', '../../_base_/schedules/schedule_4k_adamw.py'
 ]
 
 suppress_labels = list(range(0, 59))
 model = dict(
-    pretrained='pretrain/mit_b0.pth',
+    pretrained='pretrain/mit_b5.pth',
+    backbone=dict(
+        embed_dims=64, num_heads=[1, 2, 5, 8], num_layers=[3, 6, 40, 3]),
     decode_head=dict(
         num_classes=59,
         text_categories=59,
-        text_embeddings_path='pretrain/context_ViT16_clip_text.pth',
+        text_embeddings_path='pretrain/context_RN50_clip_text.pth',
         clip_unlabeled_cats=suppress_labels,
+        decode_module_cfg=dict(in_channels=[64, 128, 320, 512])
     )
 )
 
