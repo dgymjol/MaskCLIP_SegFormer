@@ -5,6 +5,8 @@ _base_ = [
 
 suppress_labels = list(range(0, 59))
 model = dict(
+    pretrained='open-mmlab://resnet101_v1c',
+    backbone=dict(depth=101),
     decode_head=dict(
         num_classes=59,
         text_categories=59,
