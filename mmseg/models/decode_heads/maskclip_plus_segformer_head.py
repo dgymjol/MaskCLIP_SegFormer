@@ -12,7 +12,7 @@ from .decode_head import BaseDecodeHead
 
 
 @HEADS.register_module()
-class MaskClipPlusHead(BaseDecodeHead):
+class MaskClipPlusSegformerHead(BaseDecodeHead):
 
     def __init__(self, decode_module_cfg, text_categories, text_channels, 
                     text_embeddings_path, cls_bg=False, norm_feat=False, 
@@ -21,8 +21,7 @@ class MaskClipPlusHead(BaseDecodeHead):
                     clip_weights_path=None, reset_counter=False, clip_channels=None, 
                     vit=False, ks_thresh=0., pd_thresh=0., conf_thresh=0., 
                     distill=False, distill_labeled=True, distill_weight=1., **kwargs):
-        super(MaskClipPlusHead, self).__init__(
-            input_transform=decode_module_cfg.pop('input_transform'), **kwargs)
+        super(MaskClipPlusSegformerHead, self).__init__(**kwargs)
         self.text_categories = text_categories
         self.text_channels = text_channels
         self.text_embeddings_path = text_embeddings_path
@@ -46,8 +45,7 @@ class MaskClipPlusHead(BaseDecodeHead):
 
         del self.conv_seg
         self.init_cfg = None
-
-        decode_module_cfg.update(kwargs)
+        
         self.build_decode_module(decode_module_cfg)
 
         self.register_buffer('text_embeddings', torch.randn(text_categories, text_channels))
@@ -70,7 +68,7 @@ class MaskClipPlusHead(BaseDecodeHead):
 
     def init_weights(self, call_super=True):
         if call_super:
-            super(MaskClipPlusHead, self).init_weights()
+            super(MaskClipPlusSegformerHead, self).init_weights()
         self.load_text_embeddings()
         if self.clip_guided:
             self.load_clip_weights()
@@ -95,7 +93,7 @@ class MaskClipPlusHead(BaseDecodeHead):
 
     def _freeze(self):
         """Freeze params and norm stats."""
-        super(MaskClipPlusHead, self)._freeze()
+        super(MaskClipPlusSegformerHead, self)._freeze()
         # always freeze these modules
         if self.clip_guided:
             attrs = ['proj'] if self.vit else ['q_proj', 'k_proj', 'v_proj', 'c_proj']
@@ -112,13 +110,7 @@ class MaskClipPlusHead(BaseDecodeHead):
     
 
     def build_decode_module(self, cfg):
-        cfg['init_cfg'] = None
-        cfg['in_channels'] = self.in_channels
-        cfg['channels'] = self.channels
         self.decode_module = build_head(cfg)
-        del self.decode_module.loss_decode
-        del self.decode_module.conv_seg
-        del self.decode_module.dropout
 
     def cls_seg(self, feat):
         """Classify each pixel."""
@@ -353,7 +345,6 @@ class MaskClipPlusHead(BaseDecodeHead):
 
                 # ignore the unlabeled
                 gt_semantic_seg[gt_semantic_seg<0] = 255
-                
             losses = self.losses(seg_logits, gt_semantic_seg)
         else:
             seg_logits = self.forward(inputs)
