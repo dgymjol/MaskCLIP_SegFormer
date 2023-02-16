@@ -1,9 +1,9 @@
 # optimizer
 optimizer = dict(
                 type='AdamW',
-                    lr=6e-05,
+                    lr=0.000024,
                     betas=(0.9, 0.999),
-                    weight_decay=0.01,
+                    weight_decay=0.004,
                     paramwise_cfg=dict(
                         custom_keys=dict(
                             pos_block=dict(decay_mult=0.0),

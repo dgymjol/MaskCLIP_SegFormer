@@ -23,6 +23,6 @@ lr_config = dict(
     min_lr=0.0,
     by_epoch=False)
 # runtime settings
-runner = dict(type='IterBasedRunner', max_iters=4000)
-checkpoint_config = dict(by_epoch=False, interval=2000)
-evaluation = dict(interval=2000, metric='mIoU', pre_eval=True)
+runner = dict(type='IterBasedRunner', max_iters=80000)
+checkpoint_config = dict(by_epoch=False, interval=8000)
+evaluation = dict(interval=8000, metric='mIoU', pre_eval=True)

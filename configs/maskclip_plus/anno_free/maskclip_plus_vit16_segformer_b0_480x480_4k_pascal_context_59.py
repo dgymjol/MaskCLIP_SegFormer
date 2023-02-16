@@ -32,7 +32,7 @@ train_pipeline = [
     dict(type='Collect', keys=['img', 'gt_semantic_seg']),
 ]
 data = dict(
-    samples_per_gpu=2,
+    samples_per_gpu=4,
     train=dict(
         pipeline=train_pipeline
     )
