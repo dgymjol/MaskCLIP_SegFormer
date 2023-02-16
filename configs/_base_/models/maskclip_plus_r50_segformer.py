@@ -2,7 +2,7 @@
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='EncoderDecoder',
-    pretrained='pretrain/mit_b0.pth',
+    pretrained=None,
     backbone=dict(
         type='MixVisionTransformer',
         in_channels=3,

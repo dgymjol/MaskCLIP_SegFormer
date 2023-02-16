@@ -5,7 +5,7 @@ _base_ = [
 
 suppress_labels = list(range(0, 59))
 model = dict(
-    pretrained='pretrain/mit_b5.pth',
+    pretrained='pretrain/mit_b5_weight.pth',
     backbone=dict(
         embed_dims=64, num_heads=[1, 2, 5, 8], num_layers=[3, 6, 40, 3]),
     decode_head=dict(

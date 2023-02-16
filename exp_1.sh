@@ -27,19 +27,14 @@ python tools/train.py configs/maskclip_plus/anno_free/maskclip_plus_vit16_segfor
 #     done
 
 # clip-cnn(r50) & seg-vit(segformerb0)
-lrs=(0.0012 0.006 0.00012 0.0006)
-for lr in ${lrs[@]}
-    do 
-        python tools/train.py configs/maskclip_plus/anno_free/maskclip_plus_r50_segformer_b0_480x480_8k_pascal_context_59.py --cfg-options optimizer.lr=${lr} data.samples_per_gpu=8 --work-dir work_dirs/anno_free/r50-sfb0-8k-${lr}-8
-    done
+# org : gpu_nums = 8, samples_per_gpu = 2, optimizer = dict(type='Adamw', lr=0.000024, momentum=0.9, weight_decay=0.004)
+python tools/train.py configs/maskclip_plus/anno_free/maskclip_plus_r50_segformer_b0_480x480_8k_pascal_context_59.py --cfg-options data.samples_per_gpu=16 optimizer.lr=0.000024 optimizer.weight_decay=0.004 --work-dir work_dirs/anno_free/r50-sfb0-8k-test-8
 
-
-
-# # # clip-vit & seg-vit(segformerb5)
-# bash tools/dist_train.sh configs/maskclip_plus/anno_free/maskclip_plus_vit16_segformer_b5_480x480_8k_pascal_context_59.py 2
-
-# # clip-cnn(r50) & seg-vit(segformerb5)
-# bash tools/dist_train.sh configs/maskclip_plus/anno_free/maskclip_plus_r50_segformer_b5_480x480_4k_pascal_context_59.py 2
+# lrs=(0.0012 0.006 0.00012 0.0006)
+# for lr in ${lrs[@]}
+#     do 
+#         python tools/train.py configs/maskclip_plus/anno_free/maskclip_plus_r50_segformer_b0_480x480_8k_pascal_context_59.py --cfg-options optimizer.lr=${lr} data.samples_per_gpu=8 --work-dir work_dirs/anno_free/r50-sfb0-8k-${lr}-8
+#     done
 
 
 

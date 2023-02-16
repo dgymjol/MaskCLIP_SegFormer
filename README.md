@@ -24,7 +24,10 @@ bash download_weights.sh
 
 **Step 3.**  Download the SegFormer weights pretrained on ImageNet-1 at [here](https://github.com/NVlabs/SegFormer#trainings) and locate them in `pretrain` folder
 
-
+**Step 4.** Convert pretrained mit models to MMSegmentation style
+```shell
+python tools/model_converters/mit2mmseg.py pretrain/mit_b0.pth pretrain/mit_b0_weight.pth
+```
 
 # MaskCLIP+
 
