@@ -16,7 +16,7 @@ This repository contains an implementation of MaskCLIP+ that uses the Segformer 
         <th>Total Params</th>
     </tr>
     <tr>
-        <td rowspan=2>CLIP(RN50)</td>
+        <td rowspan=2>CLIP(ResNet50)</td>
         <td>  DeepLabv2-ResNet101 </td>
         <td> <strong>24.82 </strong></td>
         <td> 156M </td>
