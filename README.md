@@ -4,6 +4,43 @@ MaskCLIP paper: [Extract Free Dense Labels from CLIP](https://arxiv.org/abs/2112
 
 Official MaskCLIP code : [MaskCLIP github](https://github.com/chongzhou96/MaskCLIP)
 
+This repository contains an implementation of MaskCLIP+ that uses the Segformer backbone instead of DeepLabv2
+
+# Annotation-Free Segmentation Performance
+
+<table>
+    <tr>
+        <th>CLIP backbone</th>
+        <th>Segmentor</th>
+        <th>mIoU</th>
+        <th>Total Params</th>
+    </tr>
+    <tr>
+        <td rowspan=2><strong>CLIP(RN50)</strong></td>
+        <td>  DeepLabv2-ResNet101 </td>
+        <td> <strong>24.82 </strong></td>
+        <td> 156M </td>
+    </tr>
+    <tr>
+        <td>SegFormer-b5</td>
+        <td> 22.87</td>
+        <td> 125M</td>
+    </tr>
+    <tr>
+        <td rowspan=2><strong>CLIP(ViT16)</strong></td>
+        <td>  DeepLabv2-ResNet101 </td>
+        <td> 31.56 </td>
+        <td> 166M </td>
+    </tr>
+    <tr>
+        <td>SegFormer-b5</td>
+        <td> <strong>33.88</strong></td>
+        <td> 169M</td>
+    </tr>
+</table>
+
+![Data](demo.png)
+
 # Setup
 **Step 0.**  Make a conda environment
 ```shell
@@ -33,9 +70,13 @@ python tools/model_converters/mit2mmseg.py pretrain/mit_b0.pth pretrain/mit_b0_w
 
 MaskCLIP+ trains another segmentation model(SegFormer) with pseudo labels extracted from MaskCLIP.
 
-**Train.** (please refer to [train.md](docs/en/train.md))
+**Train.** (please refer to [train.md](docs/en/train.md)
 
 ```shell
+# if single GPUs, (examples in exp_1.sh)
+python tools/train.py ${CONFIG_FILE}
+
+# if multiple GPUs, (examples in exp_2.sh)
 bash tools/dist_train.sh ${CONFIG_FILE} ${GPU_NUM}
 ```
 
