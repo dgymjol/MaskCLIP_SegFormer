@@ -1,13 +1,13 @@
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='EncoderDecoder',
-    pretrained='pretrain/mit_b0_weight.pth',
+    pretrained='pretrain/mit_b5_weight.pth',
     backbone=dict(
         type='MixVisionTransformer',
         in_channels=3,
-        embed_dims=32,
+        embed_dims=64,
         num_stages=4,
-        num_layers=[2, 2, 2, 2],
+        num_layers=[3, 6, 40, 3],
         num_heads=[1, 2, 5, 8],
         patch_sizes=[7, 3, 3, 3],
         sr_ratios=[8, 4, 2, 1],
@@ -29,7 +29,7 @@ model = dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
         decode_module_cfg=dict(
             type='SegformerHead',
-            in_channels=[32, 64, 160, 256],
+            in_channels=[64, 128, 320, 512],
             in_index=[0, 1, 2, 3],
             channels=512,
             dropout_ratio=0.1,
@@ -220,7 +220,7 @@ workflow = [('train', 1)]
 cudnn_benchmark = True
 optimizer = dict(
     type='AdamW',
-    lr=0.0012,
+    lr=2.4e-05,
     betas=(0.9, 0.999),
     weight_decay=0.004,
     paramwise_cfg=dict(
@@ -246,6 +246,6 @@ suppress_labels = [
     40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58
 ]
 find_unused_parameters = True
-work_dir = 'work_dirs/anno_free/vit-sfb0-8k-0.0012-8'
+work_dir = 'work_dirs/anno_free/vit-sfb5'
 gpu_ids = range(0, 1)
 auto_resume = False

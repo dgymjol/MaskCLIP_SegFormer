@@ -1,13 +1,13 @@
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='EncoderDecoder',
-    pretrained='pretrain/mit_b0_weight.pth',
+    pretrained='pretrain/mit_b5_weight.pth',
     backbone=dict(
         type='MixVisionTransformer',
         in_channels=3,
-        embed_dims=32,
+        embed_dims=64,
         num_stages=4,
-        num_layers=[2, 2, 2, 2],
+        num_layers=[3, 6, 40, 3],
         num_heads=[1, 2, 5, 8],
         patch_sizes=[7, 3, 3, 3],
         sr_ratios=[8, 4, 2, 1],
@@ -19,9 +19,9 @@ model = dict(
         drop_path_rate=0.1),
     decode_head=dict(
         type='MaskClipPlusSegformerHead',
-        vit=True,
+        vit=False,
         in_channels=2048,
-        channels=512,
+        channels=1024,
         num_classes=59,
         dropout_ratio=0,
         norm_cfg=dict(type='SyncBN', requires_grad=True),
@@ -29,17 +29,16 @@ model = dict(
             type='CrossEntropyLoss', use_sigmoid=False, loss_weight=1.0),
         decode_module_cfg=dict(
             type='SegformerHead',
-            in_channels=[32, 64, 160, 256],
+            in_channels=[64, 128, 320, 512],
             in_index=[0, 1, 2, 3],
-            channels=512,
+            channels=1024,
             dropout_ratio=0.1,
             num_classes=59,
             norm_cfg=dict(type='SyncBN', requires_grad=True),
             align_corners=False),
         text_categories=59,
-        text_channels=512,
-        clip_channels=768,
-        text_embeddings_path='pretrain/context_ViT16_clip_text.pth',
+        text_channels=1024,
+        text_embeddings_path='pretrain/context_RN50_clip_text.pth',
         cls_bg=False,
         norm_feat=False,
         clip_unlabeled_cats=[
@@ -49,32 +48,11 @@ model = dict(
             53, 54, 55, 56, 57, 58
         ],
         clip_cfg=dict(
-            type='VisionTransformer',
-            img_size=(224, 224),
-            patch_size=16,
-            patch_bias=False,
-            in_channels=3,
-            embed_dims=768,
-            num_layers=12,
-            num_heads=12,
-            mlp_ratio=4,
-            out_indices=-1,
-            qkv_bias=True,
-            drop_rate=0.0,
-            attn_drop_rate=0.0,
-            drop_path_rate=0.0,
-            with_cls_token=True,
-            output_cls_token=False,
-            norm_cfg=dict(type='LN', eps=1e-06),
-            act_cfg=dict(type='GELU'),
-            patch_norm=False,
-            pre_norm=True,
-            final_norm=True,
-            return_qkv=True,
-            interpolate_mode='bicubic',
-            num_fcs=2,
-            norm_eval=False),
-        clip_weights_path='pretrain/ViT16_clip_weights.pth',
+            type='ResNetClip',
+            depth=50,
+            norm_cfg=dict(type='SyncBN', requires_grad=True),
+            contract_dilation=True),
+        clip_weights_path='pretrain/RN50_clip_weights.pth',
         reset_counter=True,
         start_clip_guided=(1, -1),
         start_self_train=(-1, -1)),
@@ -130,7 +108,7 @@ test_pipeline = [
         ])
 ]
 data = dict(
-    samples_per_gpu=8,
+    samples_per_gpu=6,
     workers_per_gpu=4,
     train=dict(
         type='PascalContextDataset59',
@@ -220,7 +198,7 @@ workflow = [('train', 1)]
 cudnn_benchmark = True
 optimizer = dict(
     type='AdamW',
-    lr=0.00012,
+    lr=6e-05,
     betas=(0.9, 0.999),
     weight_decay=0.004,
     paramwise_cfg=dict(
@@ -246,6 +224,6 @@ suppress_labels = [
     40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58
 ]
 find_unused_parameters = True
-work_dir = 'work_dirs/anno_free/vit-sfb0-8k-0.00012-8'
+work_dir = 'work_dirs/anno_free/r50-sfb5'
 gpu_ids = range(0, 1)
 auto_resume = False
