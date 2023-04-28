@@ -1,4 +1,4 @@
-# MaskCLIP+ with SegFormer
+# Improvement MaskCLIP with Class Weight and MaskCLIP+ with SegFormer
 code base : [official MaskCLIP repo](https://github.com/chongzhou96/MaskCLIP), [mmsegmentation](https://github.com/open-mmlab/mmsegmentation)
 
 This repository contains the implementation and results of an improved version of [MaskCLIP](https://arxiv.org/abs/2112.01071), which incorporates a new classifier that places greater weight on classes predicted by CLIP.
@@ -72,6 +72,18 @@ bash download_weights.sh
 **Step 4.** Convert pretrained mit models to MMSegmentation style
 ```shell
 python tools/model_converters/mit2mmseg.py pretrain/mit_b0.pth pretrain/mit_b0_weight.pth
+```
+
+# MaskCLIP
+**ONLY Inference.** 
+
+Get quantitative results (mIoU):
+```shell
+python tools/test.py ${CONFIG_FILE} ${CHECKPOINT_FILE} --eval mIoU
+```
+Get qualitative results:
+```shell
+python tools/test.py ${CONFIG_FILE} ${CHECKPOINT_FILE} --show-dir ${OUTPUT_DIR}
 ```
 
 # MaskCLIP+
