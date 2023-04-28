@@ -47,7 +47,7 @@ This repository contains the implementation and results of an improved version o
     </tr>
 </table>
 
-![Data](demo/demo_maskclip_text.png)
+![Data](demo/demo_class_weight.png)
 
 # Setup
 **Step 0.**  Make a conda environment
