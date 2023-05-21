@@ -145,7 +145,7 @@ Improve method 2 : uses the Segformer backbone instead of DeepLabv2-ResNet101.
     </tr>
 </table>
 
-![Data](data/demo.png)
+![Data](demo/demo.png)
 
 # Setup
 **Step 0.**  Make a conda environment
