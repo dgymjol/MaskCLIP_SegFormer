@@ -1,4 +1,4 @@
-# Improvement MaskCLIP with Class Weight and MaskCLIP+ with SegFormer
+# Improvement MaskCLIP and MaskCLIP+ with Class Weight
 code base : [official MaskCLIP repo](https://github.com/chongzhou96/MaskCLIP), [mmsegmentation](https://github.com/open-mmlab/mmsegmentation)
 
 This repository contains the implementation and results of an improved version of [MaskCLIP](https://arxiv.org/abs/2112.01071), which incorporates a new classifier that places greater weight on classes predicted by CLIP.
