@@ -15,7 +15,7 @@ import numpy as np
 class MaskClipTextHead(BaseDecodeHead):
 
     def __init__(self, text_categories, text_channels, text_embeddings_path, text_features_path,
-                    visual_projs_path, vit=False, cw=None, ks_thresh=0., pd_thresh=0.,
+                    visual_projs_path, vit=False, tau=None, ks_thresh=0., pd_thresh=0.,
                     attn_pooling=False, num_heads=32, **kwargs):
         super(MaskClipTextHead, self).__init__(**kwargs)
 
@@ -32,7 +32,7 @@ class MaskClipTextHead(BaseDecodeHead):
             self.load_text_embeddings()
         
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.clip_model, self.clip_preprocess = clip.load("ViT-B/32", device=self.device)
+        self.clip_model, self.clip_preprocess = clip.load("ViT-B/16", device=self.device)
         try : 
             self.text_features = torch.load(text_features_path, map_location='cuda')
             self.logit_scale = nn.Parameter(torch.ones([]) * np.log(1 / 0.07))
@@ -53,7 +53,7 @@ class MaskClipTextHead(BaseDecodeHead):
         self.pd_thresh = pd_thresh
         self.attn_pooling = attn_pooling
         self.num_heads = num_heads
-        self.cw = cw
+        self.tau = tau
 
     def init_weights(self):
         super(MaskClipTextHead, self).init_weights()
@@ -82,16 +82,17 @@ class MaskClipTextHead(BaseDecodeHead):
     
     def forward_test(self, inputs, img_metas, test_cfg):
         # clip logits
-        if self.cw is None:
+        if self.tau is None:
             class_weights = None
         else:
             with torch.no_grad():
                 images = torch.stack([self.clip_preprocess(Image.open(img_meta['filename'])) for img_meta in img_metas]).to(self.device)
                 image_features = self.clip_model.encode_image(images)
                 image_features = image_features / image_features.norm(dim=1, keepdim=True)
-                # similarity = (100.0 * image_features @ self.text_features.T).softmax(dim=-1)
-                class_weights = torch.stack([torch.where(torch.sigmoid(10*image_features @ self.text_features.T)[i]>0.9, self.cw, 1.0) for i in range(len(img_metas))])
-                          
+                
+                class_weights = ((image_features @ self.text_features.T) / self.tau).softmax(dim=-1)
+
+     
         # clip_backbone + maskclip_head
         x = self._transform_inputs(inputs)
         q, k, v, cls_token = None, None, None, None

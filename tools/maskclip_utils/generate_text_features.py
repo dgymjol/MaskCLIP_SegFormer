@@ -84,7 +84,7 @@ if __name__ == '__main__':
     zeroshot_weights = zeroshot_classifier(name_mapping[args.model], classes, prompt_templates)
 
     print(zeroshot_weights.shape)
-
+    
     prefix = f'pretrain/{all_set_name}_{args.model}'
 
     torch.save(zeroshot_weights, f'{prefix}_clip_text_features.pth')

@@ -13,7 +13,7 @@ from mmcv.runner import get_dist_info
 
 import matplotlib.pyplot as plt
 import math
-
+from PIL import Image
 
 def np2tmp(array, temp_file_name=None, tmpdir=None):
     """Save ndarray to local numpy file.
@@ -93,7 +93,9 @@ def single_gpu_test(model,
     for batch_indices, data in zip(loader_indices, data_loader):
         with torch.no_grad():
             result = model(return_loss=False, **data)
-
+        # gt_file_name = data['img_metas'][0].data[0][0]['filename'].split('/')[-1].split('.')[0]
+        # result = [np.array(Image.open(f'/root/MaskCLIP_SegFormer/data/VOCdevkit/VOC2010/SegmentationClassContext/{gt_file_name}.png'))]
+        
         if show or out_dir:
             img_tensor = data['img'][0]
             img_metas = data['img_metas'][0].data[0]

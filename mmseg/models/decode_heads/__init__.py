@@ -30,6 +30,8 @@ from .maskclip_head import MaskClipHead
 from .maskclip_plus_head import MaskClipPlusHead
 from .maskclip_plus_segformer_head import MaskClipPlusSegformerHead
 from .maskclip_text_head import MaskClipTextHead
+from .maskclip_plus_text_head import MaskClipPlusTextHead
+
 
 from .aspp_headv2 import ASPPHeadV2
 
