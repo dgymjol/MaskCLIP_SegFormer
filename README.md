@@ -3,7 +3,7 @@ code base : [official MaskCLIP repo](https://github.com/chongzhou96/MaskCLIP), [
 
 This repository contains the implementation and results of an improved version of [MaskCLIP](https://arxiv.org/abs/2112.01071), which incorporates a new classifier that places greater weight on classes predicted by CLIP.
 
-# Zero-shot Segmentation Performance
+# MaskCLIP Performance
 
 <table>
     <tr>
@@ -19,10 +19,10 @@ This repository contains the implementation and results of an improved version o
         <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/maskclip_r50_520x520_pascal_context_59/eval_single_scale_20230427_211723.json">json</a></th>
     </tr>
     <tr>
-        <td> + class weight</td>
-        <td> <strong>19.21 </strong></td>
+        <td> + class weight (tau=0.25)</td>
+        <td> <strong>20.54 </strong></td>
         <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/configs/maskclip_text/maskclip_text_r50_520x520_pascal_context_59.py">config</a></th>
-        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/maskclip_text_r50_85prompts/eval_single_scale_20230427_230639.json">json</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/maskclip-text-vit16/r50/eval_single_scale_20230521_161506.json">json</a></th>
     </tr>
 </table>
 
@@ -40,14 +40,60 @@ This repository contains the implementation and results of an improved version o
         <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/maskclip_vit16_520x520_pascal_context_59/eval_single_scale_20230427_214100.json">json</a></th>
     </tr>
     <tr>
-        <td> + class weight</td>
-        <td> <strong>22.91 </strong></td>
+        <td> + class weight (tau=1)</td>
+        <td> <strong>24.96 </strong></td>
         <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/configs/maskclip_text/maskclip_text_vit16_520x520_pascal_context_59.py">config</a></th>
-        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/maskclip_text_vit16_85prompts/eval_single_scale_20230427_222508.json">json</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/maskclip-text-vit16/vit16/eval_single_scale_20230521_164456.json">json</a></th>
+    </tr>
+</table> 
+
+![Data](demo/demo_class_weight.png)
+
+
+# MaskCLIP+ Annotation-Free Segmentation Performance
+
+<table>
+    <tr>
+        <th>MaskCLIP+(RN50)</th>
+        <th>mIoU</th>
+        <th>config</th>
+        <th>log</th>
+    </tr>
+    <tr>
+        <td> base  </td>
+        <td>24.82</td>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/r50-dl2/maskclip_plus_r50_deeplabv2_r101-d8_480x480_4k_pascal_context_59.py">config</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/r50-dl2/20230220_004900.log">log</a></th>
+    </tr>
+    <tr>
+        <td> + class weight (tau=0.25)</td>
+        <td> <strong> 25.96 </strong></td>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/r50-dl2-text-vit16/maskclip_plus_r50_deeplabv2_r101-d8_class_weight_480x480_4k_pascal_context_59.py">config</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/r50-dl2-text-vit16/20230521_191842.log">json</a></th>
     </tr>
 </table>
 
-![Data](demo/demo_class_weight.png)
+<table>
+    <tr>
+        <th>MaskCLIP+(ViT16)</th>
+        <th>mIoU</th>
+        <th>config</th>
+        <th>log</th>
+    </tr>
+    <tr>
+        <td> base  </td>
+        <td>31.56</td>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/vit-dlv2/maskclip_plus_vit16_deeplabv2_r101-d8_480x480_4k_pascal_context_59.py">config</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/vit-dlv2/20230219_231252.log">log</a></th>
+    </tr>
+    <tr>
+        <td> + class weight (tau=1)</td>
+        <td> <strong>32.42</strong></td>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/vit-dlv2-text-vit16/maskclip_plus_vit16_deeplabv2_r101-d8_class_weight_480x480_4k_pascal_context_59.py">config</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/vit-dlv2-text-vit16/20230521_171058.log">json</a></th>
+    </tr>
+</table>
+
 
 # Setup
 **Step 0.**  Make a conda environment
