@@ -1,9 +1,16 @@
-# Improvement MaskCLIP and MaskCLIP+ with Class Weight
+# Improvement MaskCLIP and MaskCLIP+ with Class Weight and SegFormer
 code base : [official MaskCLIP repo](https://github.com/chongzhou96/MaskCLIP), [mmsegmentation](https://github.com/open-mmlab/mmsegmentation)
 
-This repository contains the implementation and results of an improved version of [MaskCLIP](https://arxiv.org/abs/2112.01071), which incorporates a new classifier that places greater weight on classes predicted by CLIP.
+This repository contains the implementation and results of two improved version of [MaskCLIP](https://arxiv.org/abs/2112.01071)
 
-# MaskCLIP Performance
+Improve method 1 : incorporates a new classifier that places greater weight on classes predicted by CLIP.
+
+Improve method 2 : uses the Segformer backbone instead of DeepLabv2-ResNet101.
+
+
+# Results of *Improve method 1*
+
+## MaskCLIP Performance
 
 <table>
     <tr>
@@ -49,8 +56,7 @@ This repository contains the implementation and results of an improved version o
 
 ![Data](demo/demo_class_weight.png)
 
-
-# MaskCLIP+ Annotation-Free Segmentation Performance
+## MaskCLIP+ Annotation-Free Segmentation Performance
 
 <table>
     <tr>
@@ -94,6 +100,52 @@ This repository contains the implementation and results of an improved version o
     </tr>
 </table>
 
+
+# Results of *Improve method 2*
+
+## MaskCLIP+ Annotation-Free Segmentation Performance
+<table>
+    <tr>
+        <th>CLIP backbone</th>
+        <th>Segmentor</th>
+        <th>mIoU</th>
+        <th>Total Params</th>
+        <th>config</th>
+        <th>log</th>
+    </tr>
+    <tr>
+        <td rowspan=2>CLIP(ResNet50)</td>
+        <td>  DeepLabv2-ResNet101 </td>
+        <td> <strong>24.82 </strong></td>
+        <td> 156M </td>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/r50-dl2/maskclip_plus_r50_deeplabv2_r101-d8_480x480_4k_pascal_context_59.py">config</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/r50-dl2/20230220_004900.log">log</a></th>
+    </tr>
+    <tr>
+        <td>SegFormer-b5</td>
+        <td> 22.87</td>
+        <td> 125M</td>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/r50-sfb5/maskclip_plus_r50_segformer_b5_480x480_8k_pascal_context_59.py">config</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/r50-sfb5/20230219_195921.log">log</a></th>
+    </tr>
+    <tr>
+        <td rowspan=2>CLIP(ViT16)</td>
+        <td>  DeepLabv2-ResNet101 </td>
+        <td> 31.56 </td>
+        <td> 166M </td>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/vit-dlv2/maskclip_plus_vit16_deeplabv2_r101-d8_480x480_4k_pascal_context_59.py">config</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/vit-dlv2/20230219_231252.log">log</a></th>
+    </tr>
+    <tr>
+        <td>SegFormer-b5</td>
+        <td> <strong>33.88</strong></td>
+        <td> 169M</td>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/vit-sfb5/maskclip_plus_vit16_segformer_b5_480x480_8k_pascal_context_59.py">config</a></th>
+        <th><a href="https://github.com/dgymjol/MaskCLIP_SegFormer/blob/master/work_dirs/anno_free/vit-sfb5/20230219_124812.log">log</a></th>
+    </tr>
+</table>
+
+![Data](data/demo.png)
 
 # Setup
 **Step 0.**  Make a conda environment
